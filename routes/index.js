@@ -26,3 +26,5 @@ router.post("/login", passport.authenticate("local", {
 }), (req, res, next) => { });
 
 module.exports = router;
+
+//https://localhost:3000/signup

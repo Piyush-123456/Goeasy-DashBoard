@@ -20,6 +20,17 @@ router.get("/profile", (req, res, next) => {
 })
 
 // ----------------------------------- Banner ------------------------------------------------------------------------
+
+router.get("/getBanner", async (req, res, next) => {
+  try {
+    const data = await BannerCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
 router.post("/addBanner", async (req, res, next) => {
   try {
     const banner = await new BannerCollection(req.body);
@@ -94,6 +105,16 @@ router.get("/DeleteBanner/:id", async (req, res, next) => {
 
 // --------------------------------- Category ------------------------------------------------------------------------
 
+router.get("/getCategory", async (req, res, next) => {
+  try {
+    const category = await CategoryCollection.find();
+    res.status(200).json(category);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
 router.post("/addCategory", async (req, res, next) => {
   try {
     const category = await new CategoryCollection(req.body);
@@ -167,6 +188,16 @@ router.get("/DeleteCategory/:id", async (req, res, next) => {
 })
 
 // ----------------------------- Add Subcategory -------------------------------------------
+
+router.get("/getSubcategory", async (req, res, next) => {
+  try {
+    const data = await CategoryCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
 
 router.post('/addSubcategory', async (req, res, next) => {
   try {
@@ -278,6 +309,16 @@ router.get("/DeleteSubcategory/:id", async (req, res, next) => {
 });
 
 // --------------------------------------- Child Category ------------------------------------
+
+router.get("/getChildCategory", async (req, res) => {
+  try {
+    const data = await CategoryCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
 
 router.post("/addOrUpdateChildCategory", async (req, res) => {
   try {
@@ -418,6 +459,16 @@ router.get("/DeleteChildCategory/:id", async (req, res, next) => {
 
 const ADMIN_ID = '66ae731eab5de1feb6412783';
 
+router.get("/getAdsection", async (req, res) => {
+  try {
+    const data = await AdsectionCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
 router.post("/Adsection", async (req, res, next) => {
   try {
     // Extract data from the request body
@@ -527,6 +578,15 @@ router.get("/DeleteAdSection/:id", async (req, res, next) => {
 
 //----------------------------- Notification ---------------------------------------
 
+router.get("/getNotification", async (req, res) => {
+  try {
+    const data = await NotificationCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
 
 router.post("/AddNotification", async (req, res, next) => {
   try {
