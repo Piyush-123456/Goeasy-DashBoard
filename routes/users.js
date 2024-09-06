@@ -7,6 +7,8 @@ const childCategoryCollection = require('../models/childCategory');
 const AdsectionCollection = require('../models/adsectin');
 const AdminCollection = require('../models/admin');
 const NotificationCollection = require('../models/Notification');
+const partnerCollection = require('../models/partner');
+const creditCollection = require('../models/credit_package');
 var router = express.Router();
 
 
@@ -35,6 +37,7 @@ router.post("/addBanner", async (req, res, next) => {
   try {
     const banner = await new BannerCollection(req.body);
     await banner.save();
+    console.log(banner);
     res.redirect("/users/profile");
   }
   catch (err) {
@@ -669,6 +672,135 @@ router.get("/DeleteNotification/:id", async (req, res, next) => {
     await NotificationCollection.findByIdAndDelete(req.params.id);
 
     res.redirect("/users/profile");
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+
+//------------------------------- List Partner ------------------------------------------
+
+router.get("/listPartner", async (req, res, next) => {
+  try {
+    const data = await partnerCollection.find();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.post("/addPartner", async (req, res, next) => {
+  try {
+    const { image, email, contact, balance, credit, status, actions } = req.body;
+    const data = await new partnerCollection(req.body);
+    await data.save();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.post("/updatePartner/:id", async (req, res, next) => {
+  try {
+    const data = await partnerCollection.findByIdAndUpdate(req.params.id, req.body);
+    await data.save();
+    res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.post("/AddAvatarImage/:id", async (req, res, next) => {
+  try {
+    // Ensure `req.files` contains the uploaded file
+    if (!req.files || !req.files.image) {
+      return res.status(400).send('No image file uploaded');
+    }
+    // console.log(req.files)
+    // Upload the image to ImageKit
+    const { fileId, url, thumbnailUrl } = await imagekit.upload({
+      file: req.files.image.data,
+      fileName: req.files.image.name
+    });
+
+    // Find the banner by ID
+    const adsec = await partnerCollection.findById(req.params.id);
+
+    if (!adsec) {
+      return res.status(404).send('Notification not found');
+    }
+
+    // If banner has an existing image, delete it
+    if (adsec.image && adsec.image.fileId) {
+      await imagekit.deleteFile(adsec.image.fileId);
+    }
+
+    adsec.image = { fileId, url, thumbnailUrl };
+    // Update banner with new image data
+    await adsec.save();
+
+    res.redirect("/users/profile"); // Adjust as necessary
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('An error occurred'); // Respond with an error status
+  }
+})
+
+router.get("/deletePartner/:id", async (req, res, next) => {
+  try {
+    const data = await NotificationCollection.findById(req.params.id);
+    if (!data) {
+      return res.status(404).send('Adsection not found');
+    }
+
+
+    if (!data.image || !data.image.fileId) {
+      return res.status(400).send('No fileId found in image data');
+    }
+
+    await imagekit.deleteFile(data.image.fileId);
+
+    await NotificationCollection.findByIdAndDelete(req.params.id);
+
+    res.redirect("/users/profile");
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+
+
+// -------------------------------------- Credit Package ---------------------------------
+
+router.post("/AddcreditPackage", async (req, res, next) => {
+  try {
+    const data = await new creditCollection(req.body);
+    await data.save();
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.post("/AddcreditUpdate/:id", async (req, res, next) => {
+  try {
+    const data = await new creditCollection.findByIdAndUpdate(req.params.id, req.body);
+    await data.save();
+    res.status(200).send("Details has been updated!");
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.get("/deletecreditpackage/:id", async (req, res, next) => {
+  try {
+
   }
   catch (err) {
     console.log(err.message);
