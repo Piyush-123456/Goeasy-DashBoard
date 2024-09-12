@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 const AdminCollection = require('./models/admin');
 const session = require("express-session");
 const fileUpload = require('express-fileupload')
+const cors = require('cors');
 
 
 var app = express();
@@ -18,6 +19,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -9,6 +9,7 @@ const AdminCollection = require('../models/admin');
 const NotificationCollection = require('../models/Notification');
 const partnerCollection = require('../models/partner');
 const creditCollection = require('../models/credit_package');
+const CityCollection = require('../models/City');
 var router = express.Router();
 
 
@@ -80,7 +81,6 @@ router.post("/BannerImage/:id", async (req, res, next) => {
     res.status(500).send('An error occurred'); // Respond with an error status
   }
 });
-
 
 router.post("/BannerUpdate/:id", async (req, res, next) => {
   try {
@@ -164,7 +164,6 @@ router.post("/categoryImage/:id", async (req, res, next) => {
     res.status(500).send('An error occurred'); // Respond with an error status
   }
 });
-
 
 router.post("/CategoryUpdate/:id", async (req, res, next) => {
   try {
@@ -777,6 +776,17 @@ router.get("/deletePartner/:id", async (req, res, next) => {
 
 // -------------------------------------- Credit Package ---------------------------------
 
+router.get("/creditPackage", async (req, res, next) => {
+  try {
+    const data = await creditCollection.find();
+    console.log(data);
+    res.status(200).json(data);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+});
+
 router.post("/AddcreditPackage", async (req, res, next) => {
   try {
     const data = await new creditCollection(req.body);
@@ -801,6 +811,30 @@ router.post("/AddcreditUpdate/:id", async (req, res, next) => {
 router.get("/deletecreditpackage/:id", async (req, res, next) => {
   try {
 
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+// ----------------------------------- Add City ------------------------------------------------
+
+router.post("/AddCity", async (req, res, next) => {
+  try {
+    const data = await CityCollection(req.body);
+    await data.save();
+      res.status(200).json(data);
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+})
+
+router.get("/getCity", async (req, res, next) => {
+  try {
+    const data = await CityCollection.find();
+    console.log(data);
+    res.send(data);
   }
   catch (err) {
     console.log(err.message);

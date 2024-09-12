@@ -13,7 +13,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     const { username, password, fullname, contact } = req.body;
     await AdminCollection.register({ username, contact, fullname }, password);
-    res.redirect("/login");
+    res.redirect("/users/profile");
   }
   catch (err) {
     console.log(err.message)
